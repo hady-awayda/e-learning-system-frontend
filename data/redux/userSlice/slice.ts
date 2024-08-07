@@ -1,6 +1,13 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-const initialState = {
+export interface UserState {
+  name: string | null;
+  email: string | null;
+  role: string | null;
+  courses: string[];
+}
+
+const initialState: UserState = {
   name: null,
   email: null,
   role: null,
@@ -11,21 +18,39 @@ const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    setName: (state, action) => {
+    setName: (state, action: PayloadAction<string | null>) => {
       state.name = action.payload;
     },
-    setEmail: (state, action) => {
+    setEmail: (state, action: PayloadAction<string | null>) => {
       state.email = action.payload;
     },
-    setRole: (state, action) => {
+    setRole: (state, action: PayloadAction<string | null>) => {
       state.role = action.payload;
     },
-    setCourses: (state, action) => {
-      state.courses = action.payload;
+    addCourse: (state, action: PayloadAction<string>) => {
+      state.courses.push(action.payload);
+    },
+    removeCourse: (state, action: PayloadAction<string>) => {
+      state.courses = state.courses.filter(
+        (course) => course !== action.payload
+      );
+    },
+    clearUser: (state) => {
+      state.name = null;
+      state.email = null;
+      state.role = null;
+      state.courses = [];
     },
   },
 });
 
-export const { setName, setEmail, setRole } = userSlice.actions;
+export const {
+  setName,
+  setEmail,
+  setRole,
+  addCourse,
+  removeCourse,
+  clearUser,
+} = userSlice.actions;
 
 export default userSlice.reducer;
