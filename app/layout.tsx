@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import ReduxWrapper from "../components/ReduxWrapper";
 import fetchCourses from "@/data/remote/courses/read";
+import ReduxWrapper from "../components/layout/ReduxWrapper";
 
 export const metadata: Metadata = {
   title: "E-learning System",
