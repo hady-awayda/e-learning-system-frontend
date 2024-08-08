@@ -1,19 +1,18 @@
+import { LoginData } from "@/interfaces/data";
 import request from "@/utils/request";
-import storeToken from "@/helpers/storeToken";
 
 const handleLogin = async (
   email: string,
   password: string,
-  navigationFunction: () => void
+  navigationFunction: (loginData: LoginData) => void
 ) => {
-  const data = await request("/auth/login", "POST", {
+  const data: LoginData = await request("/auth/login", "POST", {
     email,
     password,
   });
 
   if (data.token) {
-    storeToken(data.authorization);
-    navigationFunction();
+    navigationFunction(data);
   }
 };
 
