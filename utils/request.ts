@@ -7,7 +7,7 @@ const fetchData = async (
   route: string,
   requestMethod: string = RequestMethods.GET,
   body: any = null,
-  navigationFunction: (url: string) => void = (url) => {}
+  navigationFunction: () => void = () => {}
 ) => {
   try {
     // const token = JSON.parse(localStorage.getItem("token") as string);
@@ -29,17 +29,29 @@ const fetchData = async (
       // headers: headers,
     });
 
+    console.log(data);
     return data;
   } catch (err: any) {
     if (err.response?.status === 401) {
       localStorage.setItem("token", "");
 
-      navigationFunction("/login");
+      navigationFunction();
     }
 
-    console.error(err);
+    console.error(
+      err.response?.data?.message ||
+        err?.response?.data ||
+        err?.message ||
+        err.resonse ||
+        err
+    );
     throw new Error("Failed to fetch courses", {
-      cause: err,
+      cause:
+        err.response?.data?.message ||
+        err?.response?.data ||
+        err?.message ||
+        err.resonse ||
+        err,
     });
   }
 };

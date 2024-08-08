@@ -8,7 +8,6 @@ import Header from "./structural/Header";
 import { addCourse } from "@/data/redux/courseSlice/slice";
 import { useRouter } from "next/navigation";
 import request from "@/utils/request";
-import axios from "axios";
 
 type Course = {
   id: string;
@@ -21,10 +20,11 @@ type ReduxWrapperProps = {
 };
 
 const ReduxWrapper: React.FC<ReduxWrapperProps> = ({ children, courses }) => {
+  const router = useRouter();
   const [userData, setUserData] = useState(null);
 
   const redirect = () => {
-    useRouter().push("/login");
+    router.push("/login");
   };
 
   useEffect(() => {
@@ -32,13 +32,11 @@ const ReduxWrapper: React.FC<ReduxWrapperProps> = ({ children, courses }) => {
       try {
         // axios.defaults.baseURL = process.env.NEXT_PUBLIC_DEPLOYMENT_BASE_URL;
 
-        const response = await request("/courses", "GET", null, redirect);
-        // const { data } = await axios.get("/courses");
+        const userData = await request("/users", "GET", null, redirect);
         // const withdrawals = await request("/withdrawals", "GET", null, redirect);
-        console.log(response);
-        setUserData(response);
+        setUserData(userData);
       } catch (err: any) {
-        console.log(err);
+        console.error(err);
       }
     };
 
