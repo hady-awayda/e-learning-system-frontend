@@ -1,10 +1,11 @@
 "use client";
 
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { LoginData } from "@/interfaces/data";
 import { RootState } from "@/data/redux/store";
 import LoginModalContent from "../modals/Login";
-import handleLogin from "@/data/remote/auth/login";
+import handleAuth from "@/data/remote/auth/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useDispatch, useSelector } from "react-redux";
 import { setRole } from "@/data/redux/userSlice/slice";
@@ -17,7 +18,6 @@ import {
   RegisterFormSchema,
   registerSchema,
 } from "@/schemas/auth";
-import { useState } from "react";
 
 const LoginForm = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -37,17 +37,24 @@ const LoginForm = () => {
     resolver: zodResolver(isLogin ? loginSchema : registerSchema),
   });
 
+  const handleData = (loginData: LoginData) => {
+    dispatch(setToken(loginData.token));
+    dispatch(setRole(loginData.role));
+    dispatch(closeLoginModal());
+    localStorage.setItem("token", loginData.token);
+
+    loginData.role === "admin" ? router.push("/admin") : router.push("/");
+  };
+
   const onSubmit: SubmitHandler<LoginFormSchema | RegisterFormSchema> = (
     data
   ) => {
-    handleLogin(data.email, data.password, (loginData: LoginData) => {
-      localStorage.setItem("token", loginData.token);
-      dispatch(setToken(loginData.token));
-      dispatch(setRole(loginData.role));
-
-      loginData.role === "admin" ? router.push("/admin") : router.push("/");
-      dispatch(closeLoginModal());
-    });
+    handleAuth(
+      data.email,
+      data.password,
+      handleData,
+      (data as RegisterFormSchema).name
+    );
   };
 
   return (

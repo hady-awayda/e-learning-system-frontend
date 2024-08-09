@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment } from "react";
+import Button from "@/components/buttons/submit";
 import {
   Dialog,
   DialogPanel,
@@ -8,8 +8,8 @@ import {
   Transition,
   TransitionChild,
 } from "@headlessui/react";
-import Button from "@/components/buttons/submit";
 import { XMarkIcon } from "@heroicons/react/24/solid";
+import { Fragment, useEffect, useRef, useState } from "react";
 
 type LoginModalProps = {
   isOpen: boolean;
@@ -30,6 +30,19 @@ const LoginModal: React.FC<LoginModalProps> = ({
   isLogin,
   toggleForm,
 }) => {
+  const [nameHeight, setNameHeight] = useState(0);
+  const nameRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (nameRef.current) {
+      if (!isLogin) {
+        setNameHeight(nameRef.current.scrollHeight);
+      } else {
+        setNameHeight(0);
+      }
+    }
+  }, [isLogin]);
+
   return (
     <Transition show={isOpen} as={Fragment}>
       <Dialog as="div" className="relative z-10" onClose={closeModal}>
@@ -45,7 +58,7 @@ const LoginModal: React.FC<LoginModalProps> = ({
           <div className="fixed inset-0 bg-indigo-300 bg-opacity-45 backdrop-blur-md" />
         </TransitionChild>
 
-        <div className="fixed inset-0 overflow-y-auto">
+        <div className="fixed inset-0 overflow-y-auto text-black">
           <div className="flex min-h-full items-center justify-center p-4 text-center">
             <TransitionChild
               as={Fragment}
@@ -67,74 +80,80 @@ const LoginModal: React.FC<LoginModalProps> = ({
                 <DialogTitle className="text-2xl font-bold text-gray-900 mb-4">
                   {isLogin ? "Login" : "Register"}
                 </DialogTitle>
-                <form onSubmit={handleSubmit}>
-                  {!isLogin && (
-                    <div className="mb-4">
-                      <label
-                        htmlFor="name"
-                        className="flex text-sm font-medium text-gray-700"
-                      >
-                        Name
-                      </label>
-                      <input
-                        type="text"
-                        id="name"
-                        className="pl-4 p-2 mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                        {...register("name")}
-                        placeholder="Name"
-                      />
-                      {errors.name && (
-                        <p className="text-red-500 text-sm mt-1">
-                          {errors.name.message}
-                        </p>
+                <div
+                  className="transition-all duration-300 overflow-hidden"
+                  style={{ height: isLogin ? "15rem" : "21rem" }}
+                >
+                  <form onSubmit={handleSubmit}>
+                    <div
+                      ref={nameRef}
+                      style={{ height: `${nameHeight}px` }}
+                      className="transition-all duration-300 overflow-hidden"
+                    >
+                      {!isLogin && (
+                        <>
+                          <label
+                            htmlFor="name"
+                            className="flex text-sm font-medium text-gray-700"
+                          >
+                            Name
+                          </label>
+                          <input
+                            type="text"
+                            id="name"
+                            className="pl-4 p-2 mt-1 mb-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            {...register("name")}
+                            placeholder="Name"
+                          />
+                          <p className="text-red-500 text-sm h-4">
+                            {errors.name?.message}
+                          </p>
+                        </>
                       )}
                     </div>
-                  )}
 
-                  <div className="mb-4">
-                    <label
-                      htmlFor="email"
-                      className="flex text-sm font-medium text-gray-700"
-                    >
-                      Email
-                    </label>
-                    <input
-                      type="email"
-                      id="email"
-                      className="pl-4 p-2 mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                      {...register("email")}
-                      placeholder="Email"
-                    />
-                    {errors.email && (
-                      <p className="text-red-500 text-sm mt-1">
-                        {errors.email.message}
+                    <>
+                      <label
+                        htmlFor="email"
+                        className="flex text-sm font-medium text-gray-700"
+                      >
+                        Email
+                      </label>
+                      <input
+                        type="email"
+                        id="email"
+                        className="pl-4 p-2 mt-1 mb-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        {...register("email")}
+                        placeholder="Email"
+                      />
+                      <p className="text-red-500 text-sm h-4">
+                        {errors.email?.message}
                       </p>
-                    )}
-                  </div>
+                    </>
 
-                  <div className="mb-8">
-                    <label
-                      htmlFor="password"
-                      className="flex text-sm font-medium text-gray-700"
-                    >
-                      Password
-                    </label>
-                    <input
-                      type="password"
-                      id="password"
-                      className="pl-4 p-2 mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                      {...register("password")}
-                      placeholder="Password"
-                    />
-                    {errors.password && (
-                      <p className="text-red-500 text-sm mt-1">
-                        {errors.password.message}
+                    <>
+                      <label
+                        htmlFor="password"
+                        className="flex text-sm font-medium text-gray-700"
+                      >
+                        Password
+                      </label>
+                      <input
+                        type="password"
+                        id="password"
+                        className="pl-4 p-2 mt-1 mb-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        {...register("password")}
+                        placeholder="Password"
+                      />
+                      <p className="text-red-500 text-sm h-4 mb-4">
+                        {errors.password?.message}
                       </p>
-                    )}
-                  </div>
+                    </>
 
-                  <Button text={isLogin ? "Login" : "Register"} />
-                </form>
+                    <Button text={isLogin ? "Login" : "Register"} />
+                  </form>
+                </div>
+
                 <div className="mt-4 text-sm">
                   <span>
                     {isLogin
