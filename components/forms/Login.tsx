@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { LoginData } from "@/interfaces/data";
+import { LoginData } from "@/interfaces/loginForm";
 import { RootState } from "@/data/redux/store";
 import LoginModalContent from "../modals/Login";
 import handleAuth from "@/data/remote/auth/auth";

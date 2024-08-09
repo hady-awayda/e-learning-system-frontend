@@ -1,4 +1,4 @@
-import { LoginData } from "@/interfaces/data";
+import { LoginData } from "@/interfaces/loginForm";
 import request from "@/utils/request";
 
 const handleAuth = async (
