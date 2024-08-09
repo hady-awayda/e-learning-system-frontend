@@ -1,6 +1,5 @@
 "use client";
 
-import { z, infer as zodInfer } from "zod";
 import { useRouter } from "next/navigation";
 import { LoginData } from "@/interfaces/data";
 import { RootState } from "@/data/redux/store";
@@ -12,31 +11,35 @@ import { setRole } from "@/data/redux/userSlice/slice";
 import { setToken } from "@/data/redux/tokenSlice/slice";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { closeLoginModal } from "@/data/redux/modalSlice/slice";
+import {
+  LoginFormSchema,
+  loginSchema,
+  RegisterFormSchema,
+  registerSchema,
+} from "@/schemas/auth";
+import { useState } from "react";
 
-const loginSchema = z.object({
-  email: z.string().email("Invalid email address"),
-  password: z.string().min(6, "Password must be at least 6 characters"),
-});
-
-type LoginFormSchema = zodInfer<typeof loginSchema>;
-
-const LoginModal = () => {
+const LoginForm = () => {
+  const [isLogin, setIsLogin] = useState(true);
   const isOpen = useSelector(
     (state: RootState) => state.modal.isLoginModalOpen
   );
   const router = useRouter();
   const dispatch = useDispatch();
   const closeModal = () => dispatch(closeLoginModal());
+  const toggleForm = () => setIsLogin(!isLogin);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<LoginFormSchema>({
-    resolver: zodResolver(loginSchema),
+  } = useForm<LoginFormSchema | RegisterFormSchema>({
+    resolver: zodResolver(isLogin ? loginSchema : registerSchema),
   });
 
-  const onSubmit: SubmitHandler<LoginFormSchema> = (data) => {
+  const onSubmit: SubmitHandler<LoginFormSchema | RegisterFormSchema> = (
+    data
+  ) => {
     handleLogin(data.email, data.password, (loginData: LoginData) => {
       localStorage.setItem("token", loginData.token);
       dispatch(setToken(loginData.token));
@@ -49,13 +52,10 @@ const LoginModal = () => {
 
   return (
     <LoginModalContent
-      isOpen={isOpen}
-      closeModal={closeModal}
       handleSubmit={handleSubmit(onSubmit)}
-      register={register}
-      errors={errors}
+      {...{ closeModal, errors, isLogin, isOpen, register, toggleForm }}
     />
   );
 };
 
-export default LoginModal;
+export default LoginForm;

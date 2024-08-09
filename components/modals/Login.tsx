@@ -11,20 +11,24 @@ import {
 import Button from "@/components/buttons/submit";
 import { XMarkIcon } from "@heroicons/react/24/solid";
 
-type LoginModalContentProps = {
+type LoginModalProps = {
   isOpen: boolean;
   closeModal: () => void;
   handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   register: any;
   errors: any;
+  isLogin: boolean;
+  toggleForm: () => void;
 };
 
-const LoginModalContent: React.FC<LoginModalContentProps> = ({
+const LoginModal: React.FC<LoginModalProps> = ({
   isOpen,
   closeModal,
   handleSubmit,
   register,
   errors,
+  isLogin,
+  toggleForm,
 }) => {
   return (
     <Transition show={isOpen} as={Fragment}>
@@ -61,9 +65,32 @@ const LoginModalContent: React.FC<LoginModalContentProps> = ({
                   <XMarkIcon className="h-6 w-6" aria-hidden="true" />
                 </button>
                 <DialogTitle className="text-2xl font-bold text-gray-900 mb-4">
-                  Login
+                  {isLogin ? "Login" : "Register"}
                 </DialogTitle>
                 <form onSubmit={handleSubmit}>
+                  {!isLogin && (
+                    <div className="mb-4">
+                      <label
+                        htmlFor="name"
+                        className="flex text-sm font-medium text-gray-700"
+                      >
+                        Name
+                      </label>
+                      <input
+                        type="text"
+                        id="name"
+                        className="pl-4 p-2 mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        {...register("name")}
+                        placeholder="Name"
+                      />
+                      {errors.name && (
+                        <p className="text-red-500 text-sm mt-1">
+                          {errors.name.message}
+                        </p>
+                      )}
+                    </div>
+                  )}
+
                   <div className="mb-4">
                     <label
                       htmlFor="email"
@@ -84,6 +111,7 @@ const LoginModalContent: React.FC<LoginModalContentProps> = ({
                       </p>
                     )}
                   </div>
+
                   <div className="mb-8">
                     <label
                       htmlFor="password"
@@ -104,8 +132,22 @@ const LoginModalContent: React.FC<LoginModalContentProps> = ({
                       </p>
                     )}
                   </div>
-                  <Button text="Login" />
+
+                  <Button text={isLogin ? "Login" : "Register"} />
                 </form>
+                <div className="mt-4 text-sm">
+                  <span>
+                    {isLogin
+                      ? "Don't have an account?"
+                      : "Already have an account?"}
+                    <button
+                      onClick={toggleForm}
+                      className="text-indigo-600 hover:text-indigo-400 font-semibold transition-all duration-300 px-2 py-1 rounded focus-visible:outline-0"
+                    >
+                      {isLogin ? "Register" : "Login"}
+                    </button>
+                  </span>
+                </div>
               </DialogPanel>
             </TransitionChild>
           </div>
@@ -115,4 +157,4 @@ const LoginModalContent: React.FC<LoginModalContentProps> = ({
   );
 };
 
-export default LoginModalContent;
+export default LoginModal;
