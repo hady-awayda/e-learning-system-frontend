@@ -1,5 +1,8 @@
 import axios from "axios";
 import RequestMethods from "./request_methods";
+import { useSelector } from "react-redux";
+import { clearToken } from "@/data/redux/tokenSlice/slice";
+import store from "@/data/redux/store";
 
 axios.defaults.baseURL = process.env.NEXT_PUBLIC_DEPLOYMENT_BASE_URL;
 
@@ -10,31 +13,25 @@ const fetchData = async (
   navigationFunction: () => void = () => {}
 ) => {
   try {
-    // const token = JSON.parse(localStorage.getItem("token") as string);
+    // const token = useSelector((state: any) => state.token.token);
+    const token = localStorage.getItem("token");
 
-    // if (!token) {
-    //   console.error("Token not found in localStorage. Redirecting to login.");
-    //   navigationFunction("/login");
-    //   return;
-    // }
-
-    // const headers = {
-    //   Authorization: `Bearer ${token}`,
-    // };
+    const headers = {
+      Authorization: `Bearer ${token}`,
+    };
 
     const { data } = await axios.request({
       url: route,
       method: requestMethod,
       data: body,
-      // headers: headers,
+      headers: headers,
     });
 
-    console.log(data);
+    // console.log(data);
     return data;
   } catch (err: any) {
     if (err.response?.status === 401) {
       localStorage.setItem("token", "");
-
       navigationFunction();
     }
 
@@ -45,6 +42,7 @@ const fetchData = async (
         err.resonse ||
         err
     );
+
     throw new Error("Failed to fetch courses", {
       cause:
         err.response?.data?.message ||

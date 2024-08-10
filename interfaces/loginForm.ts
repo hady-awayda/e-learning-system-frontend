@@ -1,4 +1,4 @@
-export type LoginData = {
+export type LoginDataProps = {
   token: string;
   role: string;
 };

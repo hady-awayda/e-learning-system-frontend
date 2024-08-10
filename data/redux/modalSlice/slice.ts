@@ -1,8 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-
-type ModalState = {
-  isLoginModalOpen: boolean;
-};
+import { ModalState } from "./ModalState";
 
 const initialState: ModalState = {
   isLoginModalOpen: false,

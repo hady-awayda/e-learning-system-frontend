@@ -1,17 +1,9 @@
-// slices/withdrawalsSlice.ts
+import {
+  WithdrawalProp,
+  WithdrawalProps,
+  WithdrawalsState,
+} from "@/interfaces/withdrawals";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-
-interface Withdrawal {
-  id: string;
-  user: string;
-  course: string;
-  reason: string;
-  status: "Pending" | "Approved" | "Rejected";
-}
-
-interface WithdrawalsState {
-  withdrawals: Withdrawal[];
-}
 
 const initialState: WithdrawalsState = {
   withdrawals: [],
@@ -21,10 +13,10 @@ const withdrawalsSlice = createSlice({
   name: "withdrawals",
   initialState,
   reducers: {
-    addWithdrawal: (state, action: PayloadAction<Withdrawal>) => {
-      state.withdrawals.push(action.payload);
+    addWithdrawal: (state, action: PayloadAction<WithdrawalProps>) => {
+      state.withdrawals.push(...action.payload);
     },
-    updateWithdrawal: (state, action: PayloadAction<Withdrawal>) => {
+    updateWithdrawal: (state, action: PayloadAction<WithdrawalProp>) => {
       const index = state.withdrawals.findIndex(
         (withdrawal) => withdrawal.id === action.payload.id
       );

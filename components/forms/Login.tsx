@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { LoginData } from "@/interfaces/loginForm";
+import { LoginDataProps } from "@/interfaces/loginForm";
 import { RootState } from "@/data/redux/store";
 import LoginModalContent from "../modals/Login";
 import handleAuth from "@/data/remote/auth/auth";
@@ -37,7 +37,7 @@ const LoginForm = () => {
     resolver: zodResolver(isLogin ? loginSchema : registerSchema),
   });
 
-  const handleData = (loginData: LoginData) => {
+  const handleData = (loginData: LoginDataProps) => {
     dispatch(setToken(loginData.token));
     dispatch(setRole(loginData.role));
     dispatch(closeLoginModal());

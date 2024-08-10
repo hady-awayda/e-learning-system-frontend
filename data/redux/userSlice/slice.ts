@@ -1,15 +1,13 @@
+import { UserState } from "@/interfaces/userData";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-
-interface UserState {
-  name: string | null;
-  email: string | null;
-  role: string | null;
-}
 
 const initialState: UserState = {
   name: null,
   email: null,
   role: null,
+  courses: [],
+  withdrawals: [],
+  createdAt: null,
 };
 
 const userSlice = createSlice({
@@ -21,9 +19,19 @@ const userSlice = createSlice({
     },
     setEmail: (state, action: PayloadAction<string | null>) => {
       state.email = action.payload;
+      console.log(state.email);
     },
     setRole: (state, action: PayloadAction<string | null>) => {
       state.role = action.payload;
+    },
+    setCourses: (state, action: PayloadAction<string[]>) => {
+      state.courses = action.payload;
+    },
+    setWithdrawals: (state, action: PayloadAction<string[]>) => {
+      state.withdrawals = action.payload;
+    },
+    setCreatedAt: (state, action: PayloadAction<string | null>) => {
+      state.createdAt = action.payload;
     },
     clearUser: (state) => {
       state.name = null;
@@ -33,6 +41,14 @@ const userSlice = createSlice({
   },
 });
 
-export const { setName, setEmail, setRole, clearUser } = userSlice.actions;
+export const {
+  setName,
+  setEmail,
+  setRole,
+  setCourses,
+  setWithdrawals,
+  setCreatedAt,
+  clearUser,
+} = userSlice.actions;
 
 export default userSlice.reducer;
