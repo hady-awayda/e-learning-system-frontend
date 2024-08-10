@@ -27,10 +27,10 @@ const fetchData = async (
       headers: headers,
     });
 
-    // console.log(data);
+    console.log(data.token);
     return data;
   } catch (err: any) {
-    if (err.response?.status === 401) {
+    if (err.response?.status === 401 || err.response?.status === 403) {
       localStorage.setItem("token", "");
       navigationFunction();
     }

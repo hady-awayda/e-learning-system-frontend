@@ -5,6 +5,7 @@ import Button from "../buttons/submit";
 import LoginModal from "../forms/Login";
 import { useDispatch, useSelector } from "react-redux";
 import { openLoginModal } from "@/data/redux/modalSlice/slice";
+import LottieAnimation from "../Animations/LottieAnimation";
 
 const Navbar = () => {
   const dispatch = useDispatch();
@@ -17,6 +18,7 @@ const Navbar = () => {
         <Link href="/" className="text-white font-bold text-lg">
           MyApp
         </Link>
+        {/* <LottieAnimation /> */}
         {name && <p className="text-white">Hello, {name}</p>}
         <Button handleOpen={handleLoginClick} text="Login" />
         <LoginModal />
