@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { clearToken } from "@/data/redux/tokenSlice/slice";
 import store from "@/data/redux/store";
 
-axios.defaults.baseURL = process.env.NEXT_PUBLIC_DEPLOYMENT_BASE_URL;
+axios.defaults.baseURL = process.env.NEXT_PUBLIC_BASE_URL;
 
 const fetchData = async (
   route: string,
