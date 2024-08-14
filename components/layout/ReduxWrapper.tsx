@@ -7,7 +7,7 @@ import { Provider } from "react-redux";
 import { ReduxWrapperProps } from "../../interfaces/courses";
 import ReduxProvider from "./ReduxProvider";
 
-const ReduxWrapper: React.FC<ReduxWrapperProps> = ({ children, courses }) => {
+const ReduxWrapper = ({ children, courses }: ReduxWrapperProps) => {
   useEffect(() => {
     store.dispatch(addCourse(courses));
   }, [courses]);

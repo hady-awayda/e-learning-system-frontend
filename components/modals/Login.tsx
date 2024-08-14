@@ -47,7 +47,7 @@ const LoginModal: React.FC<LoginModalProps> = ({
     <Transition show={isOpen} as={Fragment}>
       <Dialog as="div" className="relative z-10" onClose={closeModal}>
         <TransitionChild
-          as={Fragment}
+          as="div"
           enter="ease-out duration-300"
           enterFrom="opacity-0"
           enterTo="opacity-100"
