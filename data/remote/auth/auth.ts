@@ -10,6 +10,7 @@ const handleAuth = async (
   const data: LoginDataProps = await request(
     name ? "/auth/register" : "/auth/login",
     "POST",
+    null,
     {
       name,
       email,
@@ -23,4 +24,4 @@ const handleAuth = async (
 };
 
 export default handleAuth;
-0
+0;

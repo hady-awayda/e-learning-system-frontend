@@ -7,11 +7,9 @@ export type Course = {
   created_by: string;
 };
 
+export type CoursesProps = Course[];
+
 export type ReduxWrapperProps = {
   children: React.ReactNode;
-  courses: Course[];
-};
-
-export type CoursesProps = {
-  courses: Course[];
+  courses: CoursesProps;
 };
