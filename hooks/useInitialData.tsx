@@ -34,6 +34,8 @@ const useInitialData = (courses: CoursesProps) => {
       return;
     }
 
+    // add logic to refetch userData if token has been fetched
+
     const fetchData = async () => {
       const userData: UserProp = await request(
         "/users",

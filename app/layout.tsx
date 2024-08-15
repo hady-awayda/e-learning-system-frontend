@@ -2,9 +2,10 @@ export const runtime = "edge";
 
 import type { Metadata } from "next";
 import "./globals.css";
-import fetchCourses from "@/data/remote/courses/read";
 import ReduxWrapper from "../components/layout/ReduxWrapper";
 import { Suspense } from "react";
+import { CoursesProps } from "@/interfaces/courses";
+import request from "@/utils/request";
 
 export const metadata: Metadata = {
   title: "E-learning System",
@@ -16,7 +17,9 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const courses = await fetchCourses();
+  const { courses } = (await request("/courses", "GET")) as {
+    courses: CoursesProps;
+  };
 
   return (
     <html lang="en">

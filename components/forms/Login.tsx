@@ -1,30 +1,25 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { LoginDataProps } from "@/interfaces/loginForm";
-import { RootState } from "@/data/redux/store";
-import LoginModalContent from "../modals/Login";
-import handleAuth from "@/data/remote/auth/auth";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useDispatch, useSelector } from "react-redux";
-import { setRole } from "@/data/redux/userSlice/slice";
-import { setToken } from "@/data/redux/tokenSlice/slice";
-import { SubmitHandler, useForm } from "react-hook-form";
 import { closeLoginModal } from "@/data/redux/modalSlice/slice";
+import { RootState } from "@/data/redux/store";
+import useAuth from "@/hooks/useAuth";
 import {
   LoginFormSchema,
   loginSchema,
   RegisterFormSchema,
   registerSchema,
 } from "@/schemas/auth";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+import LoginModalContent from "../modals/Login";
 
 const LoginForm = () => {
   const [isLogin, setIsLogin] = useState(true);
   const isOpen = useSelector(
     (state: RootState) => state.modal.isLoginModalOpen
   );
-  const router = useRouter();
   const dispatch = useDispatch();
   const closeModal = () => dispatch(closeLoginModal());
   const toggleForm = () => setIsLogin(!isLogin);
@@ -37,24 +32,12 @@ const LoginForm = () => {
     resolver: zodResolver(isLogin ? loginSchema : registerSchema),
   });
 
-  const handleData = (loginData: LoginDataProps) => {
-    dispatch(setToken(loginData.token));
-    dispatch(setRole(loginData.role));
-    dispatch(closeLoginModal());
-    localStorage.setItem("token", loginData.token);
-
-    loginData.role === "admin" ? router.push("/admin") : router.push("/");
-  };
+  const handleAuth = useAuth();
 
   const onSubmit: SubmitHandler<LoginFormSchema | RegisterFormSchema> = (
     data
   ) => {
-    handleAuth(
-      data.email,
-      data.password,
-      handleData,
-      (data as RegisterFormSchema).name
-    );
+    handleAuth(data.email, data.password, (data as RegisterFormSchema).name);
   };
 
   return (
