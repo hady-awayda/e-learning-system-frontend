@@ -1,7 +1,10 @@
+export const runtime = "edge";
+
 import type { Metadata } from "next";
 import "./globals.css";
 import fetchCourses from "@/data/remote/courses/read";
 import ReduxWrapper from "../components/layout/ReduxWrapper";
+import { Suspense } from "react";
 
 export const metadata: Metadata = {
   title: "E-learning System",
@@ -18,7 +21,9 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body>
-        <ReduxWrapper courses={courses}>{children}</ReduxWrapper>
+        <Suspense fallback={<div>Loading...</div>}>
+          <ReduxWrapper courses={courses}>{children}</ReduxWrapper>
+        </Suspense>
       </body>
     </html>
   );

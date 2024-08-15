@@ -1,20 +1,20 @@
 "use client";
 
-import { addCourse } from "@/data/redux/courseSlice/slice";
 import store from "@/data/redux/store";
-import { useEffect } from "react";
 import { Provider } from "react-redux";
 import { ReduxWrapperProps } from "../../interfaces/courses";
-import ReduxProvider from "./ReduxProvider";
+import useInitialData from "../../hooks/useInitialData";
+import Navbar from "../structural/Navbar";
+import Footer from "../structural/Footer";
 
 const ReduxWrapper = ({ children, courses }: ReduxWrapperProps) => {
-  useEffect(() => {
-    store.dispatch(addCourse(courses));
-  }, [courses]);
+  useInitialData(courses);
 
   return (
     <Provider store={store}>
-      <ReduxProvider>{children}</ReduxProvider>
+      <Navbar />
+      {children}
+      <Footer />
     </Provider>
   );
 };
