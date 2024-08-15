@@ -3,9 +3,10 @@ import RequestMethods from "./request_methods";
 import { useSelector } from "react-redux";
 import { clearToken } from "@/data/redux/tokenSlice/slice";
 import store from "@/data/redux/store";
-import { log } from "console";
 
-const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
+let baseURL;
+baseURL = process.env.NEXT_PUBLIC_BASE_URL;
+baseURL = process.env.NEXT_PUBLIC_DEPLOYMENT_BASE_URL;
 
 const fetchData = async (
   route: string,
@@ -23,7 +24,7 @@ const fetchData = async (
 
     axios.defaults.baseURL = baseURL;
 
-    log(axios.defaults.baseURL);
+    console.log(axios.defaults.baseURL);
     const { data } = await axios.request({
       url: route,
       method: requestMethod,
